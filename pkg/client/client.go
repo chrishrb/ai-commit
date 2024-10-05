@@ -10,44 +10,74 @@ import (
 	"github.com/tmc/langchaingo/llms/ollama"
 )
 
-func GetResponse() (*string, error) {
+func BuildCommitMessage() (string, error) {
   err := parseConfig()
   if err != nil {
-    return nil, err
+    return "", err
   }
 
-  llm, err := ollama.New(ollama.WithModel("llama3.2"))
-  if err != nil {
-    return nil, err
+  var sb strings.Builder
+
+  // Add branchIssuerNumber, e.g. ISSUE-123
+  var prefix string
+  if (Config.AddBranchPrefix) {
+    prefix, err := git.BranchIssuerNumber()
+    if err != nil {
+      return "", err
+    }
+    sb.WriteString(prefix + " ")
   }
 
-  prompt, err := buildPrompt(Config)
+  // Generate commit message
+  res, err := llmResponse(prefix)
   if err != nil {
-    return nil, err
+    return "", err
+  }
+  sb.WriteString(res)
+  return sb.String(), err
+}
+
+func llmResponse(branchIssuerNumber string) (string, error) {
+  llm, err := ollama.New(ollama.WithModel("llama3.2"), ollama.WithRunnerNumCtx(Config.Client.ContextWindowSize))
+  if err != nil {
+    return "", err
   }
 
   ctx := context.Background()
-  completion, err := llms.GenerateFromSinglePrompt(ctx, llm, prompt)
-  if err != nil {
-    return nil, err
-  }
 
-  return &completion, nil
-}
-
-func buildPrompt(c config) (string, error) {
-  var sb strings.Builder
+  prompt := buildPrompt(Config, branchIssuerNumber)
   diff, err := git.GetDiff(Config.IgnoredFiles)
   if err != nil {
     return "", err
   }
-  sb.WriteString(diff)
-  sb.WriteString("---------------------\n")
+  content := []llms.MessageContent{
+		llms.TextParts(llms.ChatMessageTypeSystem, prompt),
+		llms.TextParts(llms.ChatMessageTypeTool, diff),
+	}
+  completion, err := llm.GenerateContent(ctx, content, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
+		fmt.Print(string(chunk))
+		return nil
+	}))
 
+  if err != nil {
+    return "", err
+  }
+  
+  var sb strings.Builder
+  for _, comp := range completion.Choices {
+    sb.WriteString(comp.Content)
+  }
+  return sb.String(), nil
+}
+
+func buildPrompt(c config, branchIssuerNumber string) string {
+  var sb strings.Builder
   sb.WriteString(c.Prompts.Mission + "\n")
-  sb.WriteString(c.Prompts.ConventionalCommitKeywords + "\n")
-  sb.WriteString(c.Prompts.GeneralGuidelines + "\n")
+  if branchIssuerNumber == "" {
+    sb.WriteString(c.Prompts.ConventionalCommitKeywords + "\n")
+  }
   sb.WriteString(c.Prompts.DiffInstructions + "\n")
+  sb.WriteString(c.Prompts.GeneralGuidelines + "\n")
 
   if (c.OneLineCommitMessage) {
     sb.WriteString(c.Prompts.OneLineCommitGuidelines + "\n")
@@ -55,5 +85,5 @@ func buildPrompt(c config) (string, error) {
 
   fmt.Println(sb.String())
 
-  return sb.String(), nil
+  return sb.String()
 }

@@ -5,8 +5,10 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
+	"github.com/chrishrb/ai-commit/pkg/client"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -21,6 +23,13 @@ var (
 		Version:       "0.1.0",
 		SilenceErrors: true,
 		SilenceUsage:  true,
+	  Run: func(cmd *cobra.Command, args []string) {
+      _, err := client.BuildCommitMessage()
+      if err != nil {
+        log.Fatal(err)
+        return
+      }
+    },
 	}
 )
 
