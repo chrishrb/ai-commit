@@ -25,7 +25,7 @@ func BuildCommitMessage() (string, error) {
     if err != nil {
       return "", err
     }
-    sb.WriteString(prefix + " ")
+    sb.WriteString(prefix)
   }
 
   // Generate commit message
@@ -82,8 +82,6 @@ func buildPrompt(c config, branchIssuerNumber string) string {
   if (c.OneLineCommitMessage) {
     sb.WriteString(c.Prompts.OneLineCommitGuidelines + "\n")
   }
-
-  fmt.Println(sb.String())
 
   return sb.String()
 }

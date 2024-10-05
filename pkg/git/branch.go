@@ -31,5 +31,5 @@ func issuerNumberWithBranchName(branchName string) (string, error) {
   if len(issuerNumber) < 2 {
     return "", nil
   }
-	return issuerNumber[2], nil
+	return issuerNumber[2] + " ", nil
 }
