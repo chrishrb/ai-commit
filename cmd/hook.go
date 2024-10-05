@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -16,8 +15,7 @@ var hookCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 3 {
-			fmt.Println("hook not executed correct")
-			return
+			log.Fatal("hook not called correctly.")
 		}
 
     // skip hook if commit is provided with -m
@@ -29,7 +27,6 @@ var hookCmd = &cobra.Command{
 		response, err := client.BuildCommitMessage()
 		if err != nil {
 			log.Fatal(err)
-			return
 		}
 
     // write message to commit file
@@ -37,7 +34,6 @@ var hookCmd = &cobra.Command{
 		file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
 		if _, err := file.WriteString(response); err != nil {
 			log.Fatal(err)
-			return
 		}
 	},
 }

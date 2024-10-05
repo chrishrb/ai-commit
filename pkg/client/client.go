@@ -16,9 +16,7 @@ func BuildCommitMessage() (string, error) {
 		return "", err
 	}
 
-	var sb strings.Builder
-
-	// Add branchIssuerNumber, e.g. ISSUE-123
+	// Get branchIssuerNumber, e.g. ISSUE-123
 	var prefix string
 	if Config.AddBranchPrefix {
 		prefix, err = git.BranchIssuerNumber()
@@ -32,8 +30,7 @@ func BuildCommitMessage() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	sb.WriteString(res)
-	return sb.String(), err
+	return res, err
 }
 
 func llmResponse(branchIssuerNumber string) (string, error) {

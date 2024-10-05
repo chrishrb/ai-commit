@@ -13,15 +13,18 @@ A brief description of what the project is about.
 ## Getting started
 Instructions on how to install and set up the project.
 
-
 ## Usage
 Examples and instructions on how to use the project.
 
-## Contributing
-Guidelines for contributing to the project.
+## Todos
 
-## License
-Information about the project's license.
+* [] Improve outputs and error messages of tool
+* [] Add Makefile and create first version
+* [] Add README on how to start and use (with hook)
+* [] Add flake
+* [] Loading spinner
+* [] Add tests
 
-## Contact
-Contact information for the project maintainers.
+* [] More providers (copilot, ..)
+* [] Hook auto-install
+* [] GitMojis

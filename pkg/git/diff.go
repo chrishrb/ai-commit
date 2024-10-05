@@ -20,18 +20,6 @@ var ignoredFiles []string = []string{
 	".gif",
 }
 
-func getStagedFiles() ([]string, error) {
-	cmd := exec.Command("git", "diff", "--relative", "--name-only", "--cached")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		return nil, err
-	}
-	files := strings.Split(strings.TrimSpace(out.String()), "\n")
-	return files, nil
-}
-
 func GetDiff(additionalIgnoredFiles []string) (string, error) {
 	// Get the list of staged files
 	files, err := getStagedFiles()
@@ -51,6 +39,18 @@ func GetDiff(additionalIgnoredFiles []string) (string, error) {
 	}
 
 	return out.String(), nil
+}
+
+func getStagedFiles() ([]string, error) {
+	cmd := exec.Command("git", "diff", "--relative", "--name-only", "--cached")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		return nil, err
+	}
+	files := strings.Split(strings.TrimSpace(out.String()), "\n")
+	return files, nil
 }
 
 func filter(files, additionalIgnoredFiles []string) []string {
