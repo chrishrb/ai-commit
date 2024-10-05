@@ -50,9 +50,10 @@ var (
 			GeneralGuidelines: `
 2. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
 3. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
+4. Don‘t use code to explain the changes.
 `,
 			MultiLineCommitGuidelines: `
-4. After the summary, include a detailed description explaining:
+5. After the summary, include a detailed description explaining:
   - What has changed and why.
   - The issue the changes are addressing (if applicable).
   - Any important implications for other parts of the codebase.`,
