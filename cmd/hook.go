@@ -20,13 +20,20 @@ var hookCmd = &cobra.Command{
 			return
 		}
 
-		var commitMsgFile = args[0]
+    // skip hook if commit is provided with -m
+    if args[1] == "message" {
+      return
+    }
+
+    // generate commit message
 		response, err := client.BuildCommitMessage()
 		if err != nil {
 			log.Fatal(err)
 			return
 		}
 
+    // write message to commit file
+		var commitMsgFile = args[0]
 		file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
 		if _, err := file.WriteString(response); err != nil {
 			log.Fatal(err)
