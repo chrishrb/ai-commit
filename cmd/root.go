@@ -23,13 +23,13 @@ var (
 		Version:       "0.1.0",
 		SilenceErrors: true,
 		SilenceUsage:  true,
-	  Run: func(cmd *cobra.Command, args []string) {
-      _, err := client.BuildCommitMessage()
-      if err != nil {
-        log.Fatal(err)
-        return
-      }
-    },
+		Run: func(cmd *cobra.Command, args []string) {
+			_, err := client.BuildCommitMessage()
+			if err != nil {
+				log.Fatal(err)
+				return
+			}
+		},
 	}
 )
 
@@ -43,33 +43,31 @@ func Execute() {
 }
 
 func init() {
-  cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ai-commit.yaml)")
-  viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
+	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 }
 
 func initConfig() {
-  if cfgFile != "" {
-    viper.SetConfigFile(cfgFile)
-  } else {
-    home, err := os.UserHomeDir()
+	if cfgFile != "" {
+		viper.SetConfigFile(cfgFile)
+	} else {
+		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
 		viper.AddConfigPath(home)
 		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
 		viper.SetConfigFile(".ai-commit")
-  }
+	}
 
-  viper.AutomaticEnv()
+	viper.AutomaticEnv()
 
-  if err := viper.ReadInConfig(); err == nil {
+	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Config file used for jamctl: ", viper.ConfigFileUsed())
 	}
 }
-
-

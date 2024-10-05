@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
-  "os"
+	"os"
 
 	"github.com/chrishrb/ai-commit/pkg/client"
 	"github.com/spf13/cobra"
@@ -13,25 +13,25 @@ import (
 var hookCmd = &cobra.Command{
 	Use:   "hook",
 	Short: "Commit hook",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-    if len(args) < 3 {
-      fmt.Println("hook not executed correct")
-      return
-    }
+		if len(args) < 3 {
+			fmt.Println("hook not executed correct")
+			return
+		}
 
-    var commitMsgFile = args[0]
-    response, err := client.BuildCommitMessage()
-    if err != nil {
-      log.Fatal(err)
-      return
-    }
+		var commitMsgFile = args[0]
+		response, err := client.BuildCommitMessage()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
 
-    file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
-    if _, err := file.WriteString(response); err != nil {
-      log.Fatal(err)
-      return
-    }
+		file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
+		if _, err := file.WriteString(response); err != nil {
+			log.Fatal(err)
+			return
+		}
 	},
 }
 

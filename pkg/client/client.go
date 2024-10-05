@@ -11,79 +11,77 @@ import (
 )
 
 func BuildCommitMessage() (string, error) {
-  err := parseConfig()
-  if err != nil {
-    return "", err
-  }
+	err := parseConfig()
+	if err != nil {
+		return "", err
+	}
 
-  var sb strings.Builder
+	var sb strings.Builder
 
-  // Add branchIssuerNumber, e.g. ISSUE-123
-  var prefix string
-  if (Config.AddBranchPrefix) {
-    prefix, err = git.BranchIssuerNumber()
-    if err != nil {
-      return "", err
-    }
-  }
+	// Add branchIssuerNumber, e.g. ISSUE-123
+	var prefix string
+	if Config.AddBranchPrefix {
+		prefix, err = git.BranchIssuerNumber()
+		if err != nil {
+			return "", err
+		}
+	}
 
-  // Generate commit message
-  res, err := llmResponse(prefix)
-  if err != nil {
-    return "", err
-  }
-  sb.WriteString(res)
-  return sb.String(), err
+	// Generate commit message
+	res, err := llmResponse(prefix)
+	if err != nil {
+		return "", err
+	}
+	sb.WriteString(res)
+	return sb.String(), err
 }
 
 func llmResponse(branchIssuerNumber string) (string, error) {
-  llm, err := ollama.New(ollama.WithModel("llama3.2"), ollama.WithRunnerNumCtx(Config.Client.ContextWindowSize))
-  if err != nil {
-    return "", err
-  }
+	llm, err := ollama.New(ollama.WithModel(Config.Client.Model), ollama.WithRunnerNumCtx(Config.Client.ContextWindowSize))
+	if err != nil {
+		return "", err
+	}
 
-  ctx := context.Background()
+	ctx := context.Background()
 
-  prompt := buildPrompt(Config, branchIssuerNumber)
-  diff, err := git.GetDiff(Config.IgnoredFiles)
-  if err != nil {
-    return "", err
-  }
-  content := []llms.MessageContent{
+	prompt := buildPrompt(Config, branchIssuerNumber)
+	diff, err := git.GetDiff(Config.IgnoredFiles)
+	if err != nil {
+		return "", err
+	}
+	content := []llms.MessageContent{
 		llms.TextParts(llms.ChatMessageTypeSystem, prompt),
 		llms.TextParts(llms.ChatMessageTypeTool, diff),
 	}
-  completion, err := llm.GenerateContent(ctx, content, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
+	completion, err := llm.GenerateContent(ctx, content, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
 		fmt.Print(string(chunk))
 		return nil
 	}))
 
-  if err != nil {
-    return "", err
-  }
-  
-  var sb strings.Builder
-  for _, comp := range completion.Choices {
-    sb.WriteString(comp.Content)
-  }
-  return sb.String(), nil
+	if err != nil {
+		return "", err
+	}
+
+	var sb strings.Builder
+	for _, comp := range completion.Choices {
+		sb.WriteString(comp.Content)
+	}
+	return sb.String(), nil
 }
 
 func buildPrompt(c config, branchIssuerNumber string) string {
-  var sb strings.Builder
-  sb.WriteString(c.Prompts.Mission)
-  if branchIssuerNumber == "" {
-    sb.WriteString(c.Prompts.ConventionalCommitKeywords)
-  } else {
-    sb.WriteString(" starting with the following keyword: " + branchIssuerNumber + ".")
-  }
-  if (c.MultiLineCommitMessage) {
-    sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
-  }
-  sb.WriteString(c.Prompts.GeneralGuidelines)
-  sb.WriteString(c.Prompts.DiffInstructions + "\n")
+	var sb strings.Builder
+	sb.WriteString(c.Prompts.Mission)
+	if branchIssuerNumber == "" {
+		sb.WriteString(c.Prompts.ConventionalCommitKeywords)
+	} else {
+		sb.WriteString(" starting with the following keyword: '" + branchIssuerNumber + ":'.")
+	}
+	sb.WriteString(c.Prompts.GeneralGuidelines)
+	if c.MultiLineCommitMessage {
+		sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
+	}
+	sb.WriteString(c.Prompts.DiffInstructions + "\n")
 
-  fmt.Println(sb.String())
-  
-  return sb.String()
+	return sb.String()
 }

@@ -6,6 +6,7 @@ import (
 
 type client struct {
 	Provider          string
+	Model             string
 	ApiKey            string
 	ApiUrl            string
 	ContextWindowSize int
@@ -31,6 +32,7 @@ var (
 	Config config = config{
 		Client: client{
 			Provider:          "ollama",
+			Model:             "llama3.2",
 			ApiKey:            "",
 			ApiUrl:            "",
 			ContextWindowSize: 12800,
@@ -45,15 +47,15 @@ var (
   - docs: for documentation changes
   - test: for adding or modifying tests
   - chore: for maintenance tasks (e.g., updating dependencies)`,
+			GeneralGuidelines: `
+2. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
+3. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
+`,
 			MultiLineCommitGuidelines: `
-2. After the summary, include a detailed description explaining:
+4. After the summary, include a detailed description explaining:
   - What has changed and why.
   - The issue the changes are addressing (if applicable).
   - Any important implications for other parts of the codebase.`,
-			GeneralGuidelines: `
-3. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
-4. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
-`,
 			DiffInstructions: "Here is the git diff output:",
 		},
 		MultiLineCommitMessage: true,
