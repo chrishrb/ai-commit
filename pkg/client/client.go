@@ -21,11 +21,10 @@ func BuildCommitMessage() (string, error) {
   // Add branchIssuerNumber, e.g. ISSUE-123
   var prefix string
   if (Config.AddBranchPrefix) {
-    prefix, err := git.BranchIssuerNumber()
+    prefix, err = git.BranchIssuerNumber()
     if err != nil {
       return "", err
     }
-    sb.WriteString(prefix)
   }
 
   // Generate commit message
@@ -72,16 +71,19 @@ func llmResponse(branchIssuerNumber string) (string, error) {
 
 func buildPrompt(c config, branchIssuerNumber string) string {
   var sb strings.Builder
-  sb.WriteString(c.Prompts.Mission + "\n")
+  sb.WriteString(c.Prompts.Mission)
   if branchIssuerNumber == "" {
-    sb.WriteString(c.Prompts.ConventionalCommitKeywords + "\n")
+    sb.WriteString(c.Prompts.ConventionalCommitKeywords)
+  } else {
+    sb.WriteString(" starting with the following keyword: " + branchIssuerNumber + ".")
   }
+  if (c.MultiLineCommitMessage) {
+    sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
+  }
+  sb.WriteString(c.Prompts.GeneralGuidelines)
   sb.WriteString(c.Prompts.DiffInstructions + "\n")
-  sb.WriteString(c.Prompts.GeneralGuidelines + "\n")
 
-  if (c.OneLineCommitMessage) {
-    sb.WriteString(c.Prompts.OneLineCommitGuidelines + "\n")
-  }
-
+  fmt.Println(sb.String())
+  
   return sb.String()
 }
