@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"log"
+	"errors"
 	"os"
 
 	"github.com/chrishrb/ai-commit/pkg/client"
@@ -15,25 +15,25 @@ var hookCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 3 {
-			log.Fatal("hook not called correctly.")
+			cobra.CheckErr(errors.New("hook not called correctly"))
 		}
 
-    // skip hook if commit is provided with -m
-    if args[1] == "message" {
-      return
-    }
+		// skip hook if commit is provided with -m
+		if args[1] == "message" {
+			return
+		}
 
-    // generate commit message
+		// generate commit message
 		response, err := client.BuildCommitMessage()
 		if err != nil {
-			log.Fatal(err)
+			cobra.CheckErr(err)
 		}
 
-    // write message to commit file
+		// write message to commit file
 		var commitMsgFile = args[0]
 		file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
 		if _, err := file.WriteString(response); err != nil {
-			log.Fatal(err)
+			cobra.CheckErr(err)
 		}
 	},
 }

@@ -24,7 +24,7 @@ var (
 		SilenceUsage:  true,
 		Run: func(cmd *cobra.Command, args []string) {
 			_, err := client.BuildCommitMessage()
-      cobra.CheckErr(err)
+			cobra.CheckErr(err)
 		},
 	}
 )
@@ -63,7 +63,7 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 
-  err := viper.ReadInConfig()
+	err := viper.ReadInConfig()
 	cobra.CheckErr(err)
-	fmt.Println("Config file used for ai-commit: ", viper.ConfigFileUsed())
+	fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
 }

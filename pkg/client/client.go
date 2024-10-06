@@ -79,7 +79,6 @@ func buildPrompt(c config, branchIssuerNumber string) string {
 	}
 	sb.WriteString(c.Prompts.GeneralGuidelines)
 	sb.WriteString(c.Prompts.DiffInstructions + "\n")
-  fmt.Println(sb.String())
 
 	return sb.String()
 }
