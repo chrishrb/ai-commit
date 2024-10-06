@@ -3,8 +3,13 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 */
 package main
 
-import "github.com/chrishrb/ai-commit/cmd"
+import (
+	"log"
+
+	"github.com/chrishrb/ai-commit/cmd"
+)
 
 func main() {
+  log.SetPrefix("ai-commit: ")
 	cmd.Execute()
 }

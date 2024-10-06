@@ -28,6 +28,9 @@ func GetDiff(additionalIgnoredFiles []string) (string, error) {
 	}
 
 	filteredFiles := filter(files, additionalIgnoredFiles)
+  if len(filteredFiles) == 0 {
+    return "", nil
+  }
 
 	// Run git diff for the remaining files
 	cmd := exec.Command("git", append([]string{"--no-pager", "diff", "--cached", "--relative"}, filteredFiles...)...)
@@ -49,7 +52,12 @@ func getStagedFiles() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	files := strings.Split(strings.TrimSpace(out.String()), "\n")
+
+  trimmedOut := strings.TrimSpace(out.String())
+  if trimmedOut == "" {
+    return []string{}, nil
+  }
+	files := strings.Split(trimmedOut, "\n")
 	return files, nil
 }
 

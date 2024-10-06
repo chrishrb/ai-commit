@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/chrishrb/ai-commit/pkg/client"
@@ -25,10 +24,7 @@ var (
 		SilenceUsage:  true,
 		Run: func(cmd *cobra.Command, args []string) {
 			_, err := client.BuildCommitMessage()
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
+      cobra.CheckErr(err)
 		},
 	}
 )
@@ -62,12 +58,12 @@ func initConfig() {
 		viper.AddConfigPath(home)
 		viper.AddConfigPath(".")
 		viper.SetConfigType("yaml")
-		viper.SetConfigFile(".ai-commit")
+		viper.SetConfigName(".ai-commit")
 	}
 
 	viper.AutomaticEnv()
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Config file used for jamctl: ", viper.ConfigFileUsed())
-	}
+  err := viper.ReadInConfig()
+	cobra.CheckErr(err)
+	fmt.Println("Config file used for ai-commit: ", viper.ConfigFileUsed())
 }

@@ -27,7 +27,7 @@ func BuildCommitMessage() (string, error) {
 
 	// Generate commit message
 	res, err := llmResponse(prefix)
-	if err != nil {
+	if err != nil || res == "" {
 		return "", err
 	}
 	return res, err
@@ -43,7 +43,7 @@ func llmResponse(branchIssuerNumber string) (string, error) {
 
 	prompt := buildPrompt(Config, branchIssuerNumber)
 	diff, err := git.GetDiff(Config.IgnoredFiles)
-	if err != nil {
+	if err != nil || diff == "" {
 		return "", err
 	}
 	content := []llms.MessageContent{
