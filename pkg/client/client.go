@@ -74,11 +74,12 @@ func buildPrompt(c config, branchIssuerNumber string) string {
 	} else {
 		sb.WriteString(" starting with the following keyword: '" + branchIssuerNumber + ":'.")
 	}
-	sb.WriteString(c.Prompts.GeneralGuidelines)
 	if c.MultiLineCommitMessage {
 		sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
 	}
+	sb.WriteString(c.Prompts.GeneralGuidelines)
 	sb.WriteString(c.Prompts.DiffInstructions + "\n")
+  fmt.Println(sb.String())
 
 	return sb.String()
 }

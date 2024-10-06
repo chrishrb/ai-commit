@@ -47,16 +47,17 @@ var (
   - docs: for documentation changes
   - test: for adding or modifying tests
   - chore: for maintenance tasks (e.g., updating dependencies)`,
-			GeneralGuidelines: `
-2. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
-3. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
-4. Don‘t use code to explain the changes.
-`,
 			MultiLineCommitGuidelines: `
-5. After the summary, include a detailed description explaining:
+2. After the summary, include a detailed description explaining:
   - What has changed and why.
   - The issue the changes are addressing (if applicable).
   - Any important implications for other parts of the codebase.`,
+			GeneralGuidelines: `
+3. Only output one commit message and no further explanations.
+4. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
+5. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
+6. Don‘t use code to explain the changes.
+`,
 			DiffInstructions: "Here is the git diff output:",
 		},
 		MultiLineCommitMessage: true,
