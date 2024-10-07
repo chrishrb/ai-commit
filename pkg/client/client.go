@@ -18,7 +18,7 @@ func BuildCommitMessage() (string, error) {
 
 	// Get branchIssuerNumber, e.g. ISSUE-123
 	var prefix string
-	if Config.AddBranchPrefix {
+	if Config.Plugins.AddBranchPrefix {
 		prefix, err = git.BranchIssuerNumber()
 		if err != nil {
 			return "", err

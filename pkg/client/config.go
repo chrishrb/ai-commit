@@ -20,12 +20,16 @@ type prompts struct {
 	GeneralGuidelines          string
 }
 
+type plugins struct {
+	AddBranchPrefix bool
+}
+
 type config struct {
 	Client                 client
 	Prompts                prompts
 	MultiLineCommitMessage bool
 	IgnoredFiles           []string
-	AddBranchPrefix        bool
+	Plugins                plugins
 }
 
 var (
@@ -60,9 +64,11 @@ var (
 `,
 			DiffInstructions: "Here is the git diff output:",
 		},
+    Plugins: plugins{
+      AddBranchPrefix: true,
+    },
 		MultiLineCommitMessage: true,
 		IgnoredFiles:           []string{},
-		AddBranchPrefix:        true,
 	}
 )
 
