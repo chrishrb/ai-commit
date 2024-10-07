@@ -18,13 +18,10 @@ Examples and instructions on how to use the project.
 
 ## Todos
 
-* [] Improve outputs and error messages of tool
-* [] Add Makefile and create first version
 * [] Add README on how to start and use (with hook)
-* [] Add flake
 * [] Loading spinner
 * [] Add tests
-
 * [] More providers (copilot, ..)
+
 * [] Hook auto-install
 * [] GitMojis
