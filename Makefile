@@ -6,7 +6,7 @@ LDFLAGS="-s -w ${LDFLAGS_OPT}"
 all: build format lint ## Format, lint and build
 
 build: ## Build
-	go build -o bin/main main.go
+	go build -o bin/ai-commit main.go
 
 compile: ## Compile for every OS and Platform
 	echo "Compiling for every OS and Platform"
