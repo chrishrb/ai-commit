@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/chrishrb/ai-commit/pkg/client"
+	"github.com/chrishrb/ai-commit/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -63,8 +64,13 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 
+  // Read in config
 	err := viper.ReadInConfig()
   if err == nil {
 	  fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
   }
+
+  // Unmarshal to config struct
+	err = config.ParseConfig()
+  cobra.CheckErr(err)
 }

@@ -2,86 +2,41 @@ package client
 
 import (
 	"context"
-	"fmt"
-	"strings"
+	"errors"
 
+	"github.com/chrishrb/ai-commit/pkg/config"
 	"github.com/chrishrb/ai-commit/pkg/git"
-	"github.com/tmc/langchaingo/llms"
-	"github.com/tmc/langchaingo/llms/ollama"
 )
 
+type Client interface {
+  GenerateContent(ctx context.Context, diff string, branchIssue string, streamingFn func(ctx context.Context, chunk []byte) error,) (string, error)
+}
+
 func BuildCommitMessage() (string, error) {
-	err := parseConfig()
-	if err != nil {
+  var err error
+
+  // Get diff
+  diff, err := git.GetDiff(config.C.IgnoredFiles)
+	if err != nil || diff == "" {
 		return "", err
 	}
 
-	// Get branchIssuerNumber, e.g. ISSUE-123
-	var prefix string
-	if Config.Plugins.AddBranchPrefix {
-		prefix, err = git.BranchIssuerNumber()
+	// Get issue number from branch, e.g. ISSUE-123
+	var issue string
+	if config.C.Plugins.AddBranchPrefix {
+		issue, err = git.BranchIssue()
 		if err != nil {
 			return "", err
 		}
 	}
 
 	// Generate commit message
-	res, err := llmResponse(prefix)
-	if err != nil || res == "" {
-		return "", err
-	}
-	return res, err
-}
-
-func llmResponse(branchIssuerNumber string) (string, error) {
-	llm, err := ollama.New(ollama.WithModel(Config.Client.Model), ollama.WithRunnerNumCtx(Config.Client.ContextWindowSize))
-	if err != nil {
-		return "", err
-	}
-
-	ctx := context.Background()
-
-	prompt := buildPrompt(Config, branchIssuerNumber)
-	diff, err := git.GetDiff(Config.IgnoredFiles)
-	if err != nil || diff == "" {
-		return "", err
-	}
-	content := []llms.MessageContent{
-		llms.TextParts(llms.ChatMessageTypeSystem, prompt),
-		llms.TextParts(llms.ChatMessageTypeTool, diff),
-	}
-	completion, err := llm.GenerateContent(ctx, content, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
-		fmt.Print(string(chunk))
-		return nil
-	}))
-
-	if err != nil {
-		return "", err
-	}
-
-	var sb strings.Builder
-	for _, comp := range completion.Choices {
-		sb.WriteString(comp.Content)
-	}
-	return sb.String(), nil
-}
-
-func buildPrompt(c config, branchIssuerNumber string) string {
-	var sb strings.Builder
-	sb.WriteString(c.Prompts.Mission)
-	if branchIssuerNumber == "" {
-    sb.WriteString(c.Prompts.OneLineSummaryExample)
-	} else {
-		sb.WriteString(fmt.Sprintf("  b) The ticket number `%s`.", branchIssuerNumber))
-    sb.WriteString(c.Prompts.OneLineSummaryExampleWithTicketNumber)
+  var c Client
+  switch config.C.Client.Provider {
+    case "ollama": c = NewOllamaClient(config.C)
+    case "copilot": c = NewCopilotClient(config.C)
+    default: return "", errors.New("invalid provider, only copilot and ollama are supported")
   }
-	if c.MultiLineCommitMessage {
-		sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
-	}
-	sb.WriteString(c.Prompts.GeneralGuidelines)
-	sb.WriteString(c.Prompts.DiffInstructions)
 
-  fmt.Println(sb.String())
-
-	return sb.String()
+	return c.GenerateContent(context.Background(), diff, issue, nil)
 }

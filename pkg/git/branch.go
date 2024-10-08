@@ -1,21 +1,20 @@
 package git
 
 import (
-	"os/exec"
 	"regexp"
 	"strings"
 )
 
-func BranchIssuerNumber() (string, error) {
+func BranchIssue() (string, error) {
 	branchName, err := branchName()
 	if err != nil {
 		return "", err
 	}
-	return issuerNumberWithBranchName(branchName)
+	return issueWithBranchName(branchName)
 }
 
 func branchName() (string, error) {
-	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
+	cmd := shellCommandFunc("git", "rev-parse", "--abbrev-ref", "HEAD")
 	output, err := cmd.Output()
 	if err != nil {
 		return "", err
@@ -23,7 +22,7 @@ func branchName() (string, error) {
 	return string(output), nil
 }
 
-func issuerNumberWithBranchName(branchName string) (string, error) {
+func issueWithBranchName(branchName string) (string, error) {
 	const branchIssuerNumberRegex = `([.]*\/)([\-\w]*?\-\d+)`
 	branchName = strings.TrimSpace(branchName)
 	re := regexp.MustCompile(branchIssuerNumberRegex)

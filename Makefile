@@ -8,6 +8,9 @@ all: build format lint ## Format, lint and build
 build: ## Build
 	go build -o bin/ai-commit main.go
 
+test: ## Test
+	${GOCMD} test ./...
+
 compile: ## Compile for every OS and Platform
 	echo "Compiling for every OS and Platform"
 	GOOS=darwin GOARCH=amd64 go build -o bin/ai-commit-darwin-amd64 main.go

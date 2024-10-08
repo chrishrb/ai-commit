@@ -1,9 +1,7 @@
 package git
 
 import (
-	"bytes"
 	"fmt"
-	"os/exec"
 	"strings"
 )
 
@@ -33,27 +31,23 @@ func GetDiff(additionalIgnoredFiles []string) (string, error) {
 	}
 
 	// Run git diff for the remaining files
-	cmd := exec.Command("git", append([]string{"--no-pager", "diff", "--cached", "--relative"}, filteredFiles...)...)
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err = cmd.Run()
+	cmd := shellCommandFunc("git", append([]string{"--no-pager", "diff", "--cached", "--relative", "--"}, filteredFiles...)...)
+  out, err := cmd.Output()
 	if err != nil {
 		return "", err
 	}
 
-	return out.String(), nil
+	return strings.TrimSpace(string(out)), nil
 }
 
 func getStagedFiles() ([]string, error) {
-	cmd := exec.Command("git", "diff", "--relative", "--name-only", "--cached")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+	cmd := shellCommandFunc("git", "diff", "--cached", "--relative", "--name-only")
+  out, err := cmd.Output()
 	if err != nil {
 		return nil, err
 	}
 
-	trimmedOut := strings.TrimSpace(out.String())
+	trimmedOut := strings.TrimSpace(string(out))
 	if trimmedOut == "" {
 		return []string{}, nil
 	}
