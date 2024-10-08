@@ -15,11 +15,6 @@ jobs:
       with:
         go-version: 1.22
 
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v6
-      with:
-        version: v1.60
-
     - name: Build
       run: make build
 
@@ -35,6 +30,7 @@ jobs:
           exit 1
         fi
 
-    - name: Lint
-      run: make lint
-
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v6
+      with:
+        version: v1.60
