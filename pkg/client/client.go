@@ -72,7 +72,7 @@ func buildPrompt(c config, branchIssuerNumber string) string {
 	if branchIssuerNumber == "" {
     sb.WriteString(c.Prompts.OneLineSummaryExample)
 	} else {
-		sb.WriteString(fmt.Sprintf("b) The ticket number `%s`.", branchIssuerNumber))
+		sb.WriteString(fmt.Sprintf("  b) The ticket number `%s`.", branchIssuerNumber))
     sb.WriteString(c.Prompts.OneLineSummaryExampleWithTicketNumber)
   }
 	if c.MultiLineCommitMessage {
@@ -80,6 +80,8 @@ func buildPrompt(c config, branchIssuerNumber string) string {
 	}
 	sb.WriteString(c.Prompts.GeneralGuidelines)
 	sb.WriteString(c.Prompts.DiffInstructions)
+
+  fmt.Println(sb.String())
 
 	return sb.String()
 }

@@ -53,8 +53,8 @@ var (
     - test: for adding or modifying tests
     - chore: for maintenance tasks (e.g., updating dependencies)
 `,
-      OneLineSummaryExample: "Example: `fix: ISSUE-123 Resolve null pointer exception`\n",
-      OneLineSummaryExampleWithTicketNumber: "Example: `fix: resolve null pointer exception`\n",
+      OneLineSummaryExample: "  Example: `fix: ISSUE-123 Resolve null pointer exception`",
+      OneLineSummaryExampleWithTicketNumber: "  Example: `fix: resolve null pointer exception`",
 			MultiLineCommitGuidelines: `
 3. After the summary, include a detailed description explaining:
   - What has changed and why.
