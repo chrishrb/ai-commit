@@ -29,59 +29,59 @@ func Test_issueWithBranchName(t *testing.T) {
 }
 
 func Test_BranchName(t *testing.T) {
-  origShellCommandFunc := shellCommandFunc
-  defer func() { shellCommandFunc = origShellCommandFunc }()
+	origShellCommandFunc := shellCommandFunc
+	defer func() { shellCommandFunc = origShellCommandFunc }()
 
-  shellCommandCalled := false
-  shellCommandFunc = func(name string, args ...string) commandExecutor {
-      shellCommandCalled = true
+	shellCommandCalled := false
+	shellCommandFunc = func(name string, args ...string) commandExecutor {
+		shellCommandCalled = true
 
-      // Careful: relies on implementation details this could
-      // make the test fragile.
-      assert.Equal(t, "git", name, "command name")
-      assert.Len(t, args, 3, "command args")
-      assert.Equal(t, "rev-parse", args[0], "1st command arg")
-      assert.Equal(t, "--abbrev-ref", args[1], "2st command arg")
-      assert.Equal(t, "HEAD", args[2], "3st command arg")
+		// Careful: relies on implementation details this could
+		// make the test fragile.
+		assert.Equal(t, "git", name, "command name")
+		assert.Len(t, args, 3, "command args")
+		assert.Equal(t, "rev-parse", args[0], "1st command arg")
+		assert.Equal(t, "--abbrev-ref", args[1], "2st command arg")
+		assert.Equal(t, "HEAD", args[2], "3st command arg")
 
-      // Careful: if the stub deviates from how the system under
-      // test works this could generate false positives.
-      return &mockCommandExecutor{output: "feature/ISSUE-123_new-issue"}
-  }
+		// Careful: if the stub deviates from how the system under
+		// test works this could generate false positives.
+		return &mockCommandExecutor{output: "feature/ISSUE-123_new-issue"}
+	}
 
-  branch, err := branchName()
-  if assert.NoError(t, err) {
-    assert.Equal(t, "feature/ISSUE-123_new-issue", branch, "branch name")
-  }
+	branch, err := branchName()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "feature/ISSUE-123_new-issue", branch, "branch name")
+	}
 
-  assert.True(t, shellCommandCalled, "shell command called")
+	assert.True(t, shellCommandCalled, "shell command called")
 }
 
 func Test_BranchIssue(t *testing.T) {
-  origShellCommandFunc := shellCommandFunc
-  defer func() { shellCommandFunc = origShellCommandFunc }()
+	origShellCommandFunc := shellCommandFunc
+	defer func() { shellCommandFunc = origShellCommandFunc }()
 
-  shellCommandCalled := false
-  shellCommandFunc = func(name string, args ...string) commandExecutor {
-      shellCommandCalled = true
+	shellCommandCalled := false
+	shellCommandFunc = func(name string, args ...string) commandExecutor {
+		shellCommandCalled = true
 
-      // Careful: relies on implementation details this could
-      // make the test fragile.
-      assert.Equal(t, "git", name, "command name")
-      assert.Len(t, args, 3, "command args")
-      assert.Equal(t, "rev-parse", args[0], "1st command arg")
-      assert.Equal(t, "--abbrev-ref", args[1], "2st command arg")
-      assert.Equal(t, "HEAD", args[2], "3st command arg")
+		// Careful: relies on implementation details this could
+		// make the test fragile.
+		assert.Equal(t, "git", name, "command name")
+		assert.Len(t, args, 3, "command args")
+		assert.Equal(t, "rev-parse", args[0], "1st command arg")
+		assert.Equal(t, "--abbrev-ref", args[1], "2st command arg")
+		assert.Equal(t, "HEAD", args[2], "3st command arg")
 
-      // Careful: if the stub deviates from how the system under
-      // test works this could generate false positives.
-      return &mockCommandExecutor{output: "feature/ISSUE-123_new-issue"}
-  }
+		// Careful: if the stub deviates from how the system under
+		// test works this could generate false positives.
+		return &mockCommandExecutor{output: "feature/ISSUE-123_new-issue"}
+	}
 
-  issue, err := BranchIssue()
-  if assert.NoError(t, err) {
-    assert.Equal(t, "ISSUE-123", issue, "issue")
-  }
+	issue, err := BranchIssue()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "ISSUE-123", issue, "issue")
+	}
 
-  assert.True(t, shellCommandCalled, "shell command called")
+	assert.True(t, shellCommandCalled, "shell command called")
 }

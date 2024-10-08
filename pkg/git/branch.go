@@ -17,7 +17,7 @@ func BranchIssue() (string, error) {
 func branchName() (string, error) {
 	cmd := shellCommandFunc("git", "rev-parse", "--abbrev-ref", "HEAD")
 	out, err := cmd.Output()
-  slog.Debug("Get branch name", "output", out)
+	slog.Debug("Get branch name", "output", out)
 	if err != nil {
 		return "", err
 	}

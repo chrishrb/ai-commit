@@ -8,13 +8,13 @@ import (
 )
 
 type CopilotClient struct {
-  config config.Config
+	config config.Config
 }
 
 func NewCopilotClient(c config.Config) *CopilotClient {
-  return &CopilotClient{
-    config: c,
-  }
+	return &CopilotClient{
+		config: c,
+	}
 }
 
 func (c *CopilotClient) GenerateContent(
@@ -24,6 +24,6 @@ func (c *CopilotClient) GenerateContent(
 	streamingFn func(ctx context.Context, chunk []byte) error,
 ) (string, error) {
 
-  // TODO: implement
-  return "", errors.ErrUnsupported
+	// TODO: implement
+	return "", errors.ErrUnsupported
 }

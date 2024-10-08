@@ -28,7 +28,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			out, err := client.BuildCommitMessage()
 			cobra.CheckErr(err)
-      fmt.Println(out)
+			fmt.Println(out)
 		},
 	}
 )
@@ -67,20 +67,23 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 
-  // Read in config
+	// Read in config
 	err := viper.ReadInConfig()
-  if err == nil {
-	  fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
-  }
+	if err == nil {
+		fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
+	}
 
-  // Unmarshal to config struct
+	// Unmarshal to config struct
 	err = config.ParseConfig()
-  cobra.CheckErr(err)
+	cobra.CheckErr(err)
 
-  // Set LogLevel
-  switch strings.ToUpper(config.C.LogLevel) {
-    case "DEBUG": slog.SetLogLoggerLevel(slog.LevelDebug)
-    case "INFO": slog.SetLogLoggerLevel(slog.LevelInfo)
-    default: slog.SetLogLoggerLevel(slog.LevelWarn)
-  }
+	// Set LogLevel
+	switch strings.ToUpper(config.C.LogLevel) {
+	case "DEBUG":
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+	case "INFO":
+		slog.SetLogLoggerLevel(slog.LevelInfo)
+	default:
+		slog.SetLogLoggerLevel(slog.LevelWarn)
+	}
 }

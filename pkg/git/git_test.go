@@ -1,9 +1,9 @@
 package git
 
 type mockCommandExecutor struct {
-  output string
+	output string
 }
 
 func (m *mockCommandExecutor) Output() ([]byte, error) {
-    return []byte(m.output), nil
+	return []byte(m.output), nil
 }

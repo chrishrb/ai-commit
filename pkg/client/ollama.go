@@ -13,9 +13,9 @@ type OllamaClient struct {
 }
 
 func NewOllamaClient(c config.Config) *OllamaClient {
-  return &OllamaClient{
-    config: c,
-  }
+	return &OllamaClient{
+		config: c,
+	}
 }
 
 func (c *OllamaClient) GenerateContent(

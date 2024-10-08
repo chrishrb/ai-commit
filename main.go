@@ -10,6 +10,6 @@ import (
 )
 
 func main() {
-  slog.SetLogLoggerLevel(slog.LevelDebug)
+	slog.SetLogLoggerLevel(slog.LevelDebug)
 	cmd.Execute()
 }
