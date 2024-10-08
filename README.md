@@ -1,4 +1,9 @@
-# ai-commit
+<br />
+<div align="center">
+  <a href="#">
+    <img src=".github/logo.png" alt="Logo" height="80">
+  </a>
+</div>
 
 ## Description
 
