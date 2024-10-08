@@ -32,9 +32,9 @@ var hookCmd = &cobra.Command{
 		// write message to commit file
 		var commitMsgFile = args[0]
 		file, err := os.OpenFile(commitMsgFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModeAppend)
-		if _, err := file.WriteString(response); err != nil {
-			cobra.CheckErr(err)
-		}
+		cobra.CheckErr(err)
+    _, err = file.WriteString(response)
+		cobra.CheckErr(err)
 	},
 }
 
