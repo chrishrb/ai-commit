@@ -58,9 +58,7 @@ client:
 prompts:
     mission: |
         You are provided with a git diff output that shows code changes. Your task is to generate a structured and descriptive commit message based on the following guidelines:
-        1. The commit message should have a short, one-line summary (50 characters or less)
-    conventionalCommitKeywords: |
-        starting with one of the following keywords:
+        1. The commit message should have a short, one-line summary (50 characters or less) starting with one of the following keywords:
             - feat: for new features or enhancements
             - fix: for bug fixes
             - refactor: for code restructuring without changing behavior

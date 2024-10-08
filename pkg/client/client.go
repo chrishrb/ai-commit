@@ -70,15 +70,16 @@ func buildPrompt(c config, branchIssuerNumber string) string {
 	var sb strings.Builder
 	sb.WriteString(c.Prompts.Mission)
 	if branchIssuerNumber == "" {
-		sb.WriteString(c.Prompts.ConventionalCommitKeywords)
+    sb.WriteString(c.Prompts.OneLineSummaryExample)
 	} else {
-		sb.WriteString(" starting with the following keyword: '" + branchIssuerNumber + ":'.")
-	}
+		sb.WriteString(fmt.Sprintf("b) The ticket number `%s`.", branchIssuerNumber))
+    sb.WriteString(c.Prompts.OneLineSummaryExampleWithTicketNumber)
+  }
 	if c.MultiLineCommitMessage {
 		sb.WriteString(c.Prompts.MultiLineCommitGuidelines)
 	}
 	sb.WriteString(c.Prompts.GeneralGuidelines)
-	sb.WriteString(c.Prompts.DiffInstructions + "\n")
+	sb.WriteString(c.Prompts.DiffInstructions)
 
 	return sb.String()
 }

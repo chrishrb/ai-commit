@@ -64,6 +64,7 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
-	cobra.CheckErr(err)
-	fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
+  if err == nil {
+	  fmt.Println("Config file used for ai-commit:", viper.ConfigFileUsed())
+  }
 }
