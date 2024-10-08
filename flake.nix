@@ -11,7 +11,7 @@
         ai-commit = pkgs.buildGoModule {
           name = "ai-commit";
           src = self;
-          vendorHash = "sha256-LUS1tu4OIlP1awQzKZomlxUYmXfb/dvK/EsN/f8yLEA=";
+          vendorHash = "sha256-mr5Q2iYL56B8VC/gRi3rP//PdD3aFZc+5obn63QkWWk=";
         };
       in
       {
