@@ -74,9 +74,9 @@ func filter(files, additionalIgnoredFiles []string) []string {
 	}
 
 	if len(ignored) > 0 {
-		fmt.Println("Some files are excluded from 'git diff'. No commit messages are generated for this files:")
+    fmt.Println("🙈 Some files are excluded from generating commit messages:")
 		for _, file := range ignored {
-			fmt.Println(file)
+			fmt.Printf("  ・%s\n", file)
 		}
 	}
 

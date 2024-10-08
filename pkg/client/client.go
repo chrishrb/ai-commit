@@ -3,7 +3,9 @@ package client
 import (
 	"context"
 	"errors"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/chrishrb/ai-commit/pkg/config"
 	"github.com/chrishrb/ai-commit/pkg/git"
 )
@@ -38,5 +40,11 @@ func BuildCommitMessage() (string, error) {
     default: return "", errors.New("invalid provider, only copilot and ollama are supported")
   }
 
-	return c.GenerateContent(context.Background(), diff, issue, nil)
+  s := spinner.New(spinner.CharSets[14], 100 * time.Millisecond)
+  s.Start()
+  s.Prefix = "💬 "
+  content, err := c.GenerateContent(context.Background(), diff, issue, nil)
+  s.FinalMSG = "💬 Commit message generated."
+  s.Stop()
+  return content, err
 }

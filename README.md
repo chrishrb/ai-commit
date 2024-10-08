@@ -84,9 +84,8 @@ ignoredFiles: []
 
 ## Todos
 
-* [] Loading spinner
-* [] Add tests
-* [] More providers (copilot, ..)
+* [ ] Loading spinner
+* [ ] More providers (copilot, ..)
 
-* [] Hook auto-install
-* [] GitMojis
+* [ ] Hook auto-install
+* [ ] GitMojis
