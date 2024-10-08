@@ -84,7 +84,6 @@ ignoredFiles: []
 
 ## Todos
 
-* [ ] Loading spinner
 * [ ] More providers (copilot, ..)
 
 * [ ] Hook auto-install

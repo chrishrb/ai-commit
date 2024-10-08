@@ -24,7 +24,6 @@ func (c *OllamaClient) GenerateContent(
 	branchIssue string,
 	streamingFn func(ctx context.Context, chunk []byte) error,
 ) (string, error) {
-
 	llm, err := ollama.New(ollama.WithModel(config.C.Client.Model), ollama.WithRunnerNumCtx(config.C.Client.ContextWindowSize))
 	if err != nil {
 		return "", err
