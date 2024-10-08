@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/chrishrb/ai-commit/pkg/client"
 	"github.com/chrishrb/ai-commit/pkg/config"
@@ -24,8 +26,9 @@ var (
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		Run: func(cmd *cobra.Command, args []string) {
-			_, err := client.BuildCommitMessage()
+			out, err := client.BuildCommitMessage()
 			cobra.CheckErr(err)
+      fmt.Println(out)
 		},
 	}
 )
@@ -73,4 +76,11 @@ func initConfig() {
   // Unmarshal to config struct
 	err = config.ParseConfig()
   cobra.CheckErr(err)
+
+  // Set LogLevel
+  switch strings.ToUpper(config.C.LogLevel) {
+    case "DEBUG": slog.SetLogLoggerLevel(slog.LevelDebug)
+    case "INFO": slog.SetLogLoggerLevel(slog.LevelInfo)
+    default: slog.SetLogLoggerLevel(slog.LevelWarn)
+  }
 }

@@ -1,6 +1,7 @@
 package git
 
 import (
+	"log/slog"
 	"regexp"
 	"strings"
 )
@@ -15,11 +16,12 @@ func BranchIssue() (string, error) {
 
 func branchName() (string, error) {
 	cmd := shellCommandFunc("git", "rev-parse", "--abbrev-ref", "HEAD")
-	output, err := cmd.Output()
+	out, err := cmd.Output()
+  slog.Debug("Get branch name", "output", out)
 	if err != nil {
 		return "", err
 	}
-	return string(output), nil
+	return string(out), nil
 }
 
 func issueWithBranchName(branchName string) (string, error) {

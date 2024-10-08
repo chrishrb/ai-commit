@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -27,6 +28,7 @@ type plugins struct {
 }
 
 type Config struct {
+	LogLevel               string
 	Client                 client
 	Prompts                prompts
 	MultiLineCommitMessage bool
@@ -36,6 +38,7 @@ type Config struct {
 
 
 var C Config = Config{
+  LogLevel: "INFO",
   Client: client{
     Provider:          "ollama",
     Model:             "llama3.2",
@@ -96,5 +99,6 @@ func (C *Config) BuildPrompt(issue string) string {
 	}
 	sb.WriteString(C.Prompts.GeneralGuidelines)
 	sb.WriteString(C.Prompts.DiffInstructions)
+  slog.Debug("BuildPrompt", "prompt", sb.String())
 	return sb.String()
 }

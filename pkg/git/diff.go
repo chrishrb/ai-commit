@@ -1,7 +1,7 @@
 package git
 
 import (
-	"fmt"
+	"log/slog"
 	"strings"
 )
 
@@ -33,6 +33,7 @@ func GetDiff(additionalIgnoredFiles []string) (string, error) {
 	// Run git diff for the remaining files
 	cmd := shellCommandFunc("git", append([]string{"--no-pager", "diff", "--cached", "--relative", "--"}, filteredFiles...)...)
   out, err := cmd.Output()
+  slog.Debug("Get diff", "output", string(out))
 	if err != nil {
 		return "", err
 	}
@@ -43,6 +44,7 @@ func GetDiff(additionalIgnoredFiles []string) (string, error) {
 func getStagedFiles() ([]string, error) {
 	cmd := shellCommandFunc("git", "diff", "--cached", "--relative", "--name-only")
   out, err := cmd.Output()
+  slog.Debug("Get staged files", "output", string(out))
 	if err != nil {
 		return nil, err
 	}
@@ -59,6 +61,7 @@ func filter(files, additionalIgnoredFiles []string) []string {
 	var filteredFiles []string
 	var ignored []string
 	ignoredFiles = append(ignoredFiles, additionalIgnoredFiles...)
+  slog.Debug("Filtered", "files", ignoredFiles)
 	for _, file := range files {
 		ignore := false
 		for _, pattern := range ignoredFiles {
@@ -74,10 +77,7 @@ func filter(files, additionalIgnoredFiles []string) []string {
 	}
 
 	if len(ignored) > 0 {
-    fmt.Println("🙈 Some files are excluded from generating commit messages:")
-		for _, file := range ignored {
-			fmt.Printf("  ・%s\n", file)
-		}
+    slog.Debug("Some files are excluded from generating commit messages:", "files", ignored)
 	}
 
 	return filteredFiles

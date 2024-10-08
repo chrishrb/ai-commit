@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -22,6 +23,7 @@ func BuildCommitMessage() (string, error) {
 	if err != nil || diff == "" {
 		return "", err
 	}
+  slog.Debug("BuildCommitMessage", "diff", diff)
 
 	// Get issue number from branch, e.g. ISSUE-123
 	var issue string
@@ -31,6 +33,7 @@ func BuildCommitMessage() (string, error) {
 			return "", err
 		}
 	}
+  slog.Debug("BuildCommitMessage", "issue", issue)
 
 	// Generate commit message
   var c Client
@@ -44,7 +47,6 @@ func BuildCommitMessage() (string, error) {
   s.Start()
   s.Prefix = "💬 "
   content, err := c.GenerateContent(context.Background(), diff, issue, nil)
-  s.FinalMSG = "💬 Commit message generated."
   s.Stop()
   return content, err
 }
