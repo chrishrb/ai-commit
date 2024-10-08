@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="#">
-    <img src=".github/logo.png" alt="Logo" height="80">
+    <img src=".github/logo.png" alt="Logo" height="130">
   </a>
 </div>
 
