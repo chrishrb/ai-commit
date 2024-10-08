@@ -96,6 +96,5 @@ func (C *Config) BuildPrompt(issue string) string {
 	}
 	sb.WriteString(C.Prompts.GeneralGuidelines)
 	sb.WriteString(C.Prompts.DiffInstructions)
-  fmt.Println(sb.String())
 	return sb.String()
 }
