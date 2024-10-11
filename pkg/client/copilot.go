@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
-	"errors"
 
 	"github.com/chrishrb/ai-commit/pkg/config"
+	copilot "github.com/stong1994/github-copilot-api"
 )
 
 type CopilotClient struct {
@@ -23,7 +23,29 @@ func (c *CopilotClient) GenerateContent(
 	branchIssue string,
 	streamingFn func(ctx context.Context, chunk []byte) error,
 ) (string, error) {
+  client, err := copilot.NewCopilot(copilot.WithCompletionModel(c.config.Client.Model))
+	if err != nil {
+		return "", err
+	}
 
-	// TODO: implement
-	return "", errors.ErrUnsupported
+	prompt := config.C.BuildPrompt(branchIssue)
+	response, err := client.CreateCompletion(ctx, &copilot.CompletionRequest{
+		Messages: []copilot.Message{
+			{
+				Role:    "system",
+				Content: prompt,
+			},
+			{
+				Role:    "user",
+				Content: diff,
+			},
+		},
+		StreamingFunc: streamingFn,
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	return response.Choices[0].Message.Content, nil
 }

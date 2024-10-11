@@ -39,7 +39,7 @@ type Config struct {
 var C Config = Config{
 	LogLevel: "INFO",
 	Client: client{
-		Provider:          "ollama",
+		Provider:          "copilot",
 		Model:             "llama3.2",
 		ContextWindowSize: 12800,
 	},

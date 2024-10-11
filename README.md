@@ -5,8 +5,6 @@
   </a>
 </div>
 
-## Description
-
 ai-commit is a tool designed to streamline the process of creating meaningful and descriptive commit messages. By leveraging LLMs, this tool analyzes the changes made by running `git diff --cached` and automatically generates commit messages that accurately reflect the modifications. 
 **Key Features:**
 - **Contextual Understanding:** Analyzes code changes to understand the context and purpose of the modifications.
@@ -55,41 +53,42 @@ You can configure the tool by creating a `~/.ai-commit.yaml` file in your home d
 
 ```yaml
 client:
-    provider: "ollama"
-    model: "llama3.2"
-    apiKey: ""
-    apiUrl: ""
+    provider: ollama # or copilot
+    model: llama3.2
     contextWindowSize: 12800
 prompts:
-    mission: |
+    mission: | 
         You are provided with a git diff output that shows code changes. Your task is to generate a structured and descriptive commit message based on the following guidelines:
-        1. The commit message should have a short, one-line summary (50 characters or less) starting with one of the following keywords:
-            - feat: for new features or enhancements
-            - fix: for bug fixes
-            - refactor: for code restructuring without changing behavior
-            - docs: for documentation changes
-            - test: for adding or modifying tests
-            - chore: for maintenance tasks (e.g., updating dependencies)
+        1. The commit message should have a short, one-line summary (50 characters or less), starting with:
+          a) one of the following keywords:
+          - feat: for new features or enhancements
+          - fix: for bug fixes
+          - refactor: for code restructuring without changing behavior
+          - docs: for documentation changes
+          - test: for adding or modifying tests
+          - chore: for maintenance tasks (e.g., updating dependencies)
+
+    oneLineSummaryExample: "  Example: 'fix: resolve null pointer exception'"
+    oneLineSummaryExampleWithTicketNumber: "  Example: 'fix: ISSUE-123 Resolve null pointer exception'"
     multiLineCommitGuidelines: |
-        2. After the summary, include a detailed description explaining:
+        3. After the summary, include a detailed description explaining:
           - What has changed and why.
           - The issue the changes are addressing (if applicable).
           - Any important implications for other parts of the codebase.
     generalGuidelines: |
-        3. Only output one commit message and no further explanations.
-        4. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
-        5. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
-        6. Don‘t use code to explain the changes.
-    diffInstructions: "Here is the git diff output:"
+        4. Only output one commit message and no further explanations.
+        5. Use an imperative tone (e.g., 'Fix', 'Add', 'Update').
+        6. Ensure that the message is clear and concise, focusing on the intent of the changes rather than just describing the diff.
+        7. Don‘t use code to explain the changes.
+    diffInstructions: "Here is the git diff output:\n"
 plugins:
     addBranchPrefix: true
 multiLineCommitMessage: true
 ignoredFiles: []
+logLevel: "INFO"
 ```
 
 ## Todos
-
-* [ ] More providers (copilot, ..)
 
 * [ ] Hook auto-install
 * [ ] GitMojis
