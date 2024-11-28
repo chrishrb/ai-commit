@@ -23,7 +23,7 @@ func (c *CopilotClient) GenerateContent(
 	branchIssue string,
 	streamingFn func(ctx context.Context, chunk []byte) error,
 ) (string, error) {
-  client, err := copilot.NewCopilot(copilot.WithCompletionModel(c.config.Client.Model))
+	client, err := copilot.NewCopilot(copilot.WithCompletionModel(c.config.Client.Model))
 	if err != nil {
 		return "", err
 	}

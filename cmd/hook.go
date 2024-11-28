@@ -19,7 +19,8 @@ var hookCmd = &cobra.Command{
 		}
 
 		// skip hook if commit is provided with -m
-		if args[1] == "message" {
+		skip, _ := cmd.Flags().GetBool("skip-ai")
+		if args[1] == "message" || skip {
 			return
 		}
 
@@ -40,6 +41,8 @@ var hookCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(hookCmd)
+
+	hookCmd.PersistentFlags().Bool("skip-ai", false, "Skip AI-generated commit message creation")
 
 	// Here you will define your flags and configuration settings.
 
