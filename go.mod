@@ -6,6 +6,7 @@ require (
 	github.com/briandowns/spinner v1.23.1
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
+	github.com/stong1994/github-copilot-api v0.0.0-20241128162310-fa83a9d9fc9b
 	github.com/stretchr/testify v1.9.0
 	github.com/tmc/langchaingo v0.1.12
 )
@@ -31,7 +32,6 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stong1994/github-copilot-api v0.0.0-20241128162310-fa83a9d9fc9b // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
